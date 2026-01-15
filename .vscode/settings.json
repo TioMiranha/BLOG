@@ -1,11 +1,26 @@
 {
-  "breadcrumbs.enabled": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
 
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll.eslint": true
+  },
+
+  "breadcrumbs.enabled": false,
   "editor.lineNumbers": "off",
   "workbench.editor.labelFormat": "short",
-  "editor.tabSize": 2,
   "explorer.compactFolders": false,
-  "files.eol": "\n",
 
   "code-runner.clearPreviousOutput": true,
   "code-runner.runInTerminal": true,
@@ -18,33 +33,11 @@
     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
 
-  // 🛠 Formatação e Lint
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-
-  "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[xml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[svg]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "vscode.css-language-features"
-  }
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[svg]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[xml]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
 }

@@ -1,24 +1,16 @@
-import { Container } from '@/components/Container';
+import { PostFeatured } from '@/components/PostFeatured';
 import { PostsList } from '@/components/PostsList';
 import { SpinLoader } from '@/components/SpinLoader';
 import { Suspense } from 'react';
 
 export default async function HomePage() {
-
   return (
-    <Container>
-
-      <header>
-        <h1 className='text-6xl font-bold text-center py-8 '>ESSA É A TAL DA HEADER</h1>
-      </header>
-
+    <>
       <Suspense fallback={<SpinLoader />}>
+        <PostFeatured />
+
         <PostsList />
       </Suspense>
-
-      <footer>
-        <p className='text-6xl font-bold text-center py-8'>VASCO</p>
-      </footer>
-    </Container>
+    </>
   );
 }
