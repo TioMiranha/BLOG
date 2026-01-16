@@ -1,5 +1,2 @@
-@import "tailwindcss";
-
-@theme inline {
-  --color-blog: #ff0000;
-}
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
