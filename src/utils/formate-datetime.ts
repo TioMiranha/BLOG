@@ -19,6 +19,9 @@ export function formatDistanceToNow(rawDate: string): string {
   });
 }
 
-const rawDate = '2026-01-15T19:18:11.476Z';
-console.log(rawDate);
-console.log(formatDistanceToNow(rawDate));
+export function formatHour(timesTampMs: number): string {
+  const date = new Date(timesTampMs);
+  return format(date, 'HH:mm:ss', {
+    locale: ptBR,
+  });
+}
