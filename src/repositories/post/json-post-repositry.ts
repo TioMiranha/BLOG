@@ -1,3 +1,4 @@
+import { SIMULATE_MS } from '@/lib/constants';
 import { PostModel } from '@/models/post/post-model';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
@@ -11,7 +12,6 @@ const JSON_POSTS_FILE_PATH = resolve(
   'seed',
   'posts.json',
 );
-const SIMULATE_MS = 0;
 
 export class JsonPostRepository implements PostRepository {
   private async simulateWait() {
