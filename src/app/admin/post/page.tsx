@@ -1,4 +1,4 @@
-import PostsListAdmin from '@/components/PostsListsAdmin';
+import PostsListAdmin from '@/components/admin/PostsListsAdmin';
 import { SpinLoader } from '@/components/SpinLoader';
 import { findAllPostAdmin } from '@/lib/post/queries/admin';
 import { Metadata } from 'next';
