@@ -1,23 +1,78 @@
 'use client';
+import { createPostAction } from '@/actions/posts/create-post-action';
+import { updatePostAction } from '@/actions/posts/update-post-action';
 import { Button } from '@/components/Button';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkDownEditor';
-import { useState } from 'react';
+import { makePartialPublicPost, PublicPost } from '@/dto/post/dto';
+import { useActionState, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { ImageUploader } from '../ImageUploader';
 
-export function ManagePostForm() {
-  const [contentValue, setContentValue] = useState('');
+type ManagePostFormUpdateProps = {
+  mode: 'update';
+  publicPost?: PublicPost;
+};
+
+type ManagePostFormCreateProps = {
+  mode: 'create';
+};
+
+type ManagePostFormProps =
+  | ManagePostFormUpdateProps
+  | ManagePostFormCreateProps;
+
+export function ManagePostForm(props: ManagePostFormProps) {
+  const { mode } = props;
+
+  let publicPost;
+
+  if (mode === 'update') {
+    publicPost = props.publicPost;
+  }
+
+  const initialState = {
+    formState: makePartialPublicPost(publicPost),
+    errors: [],
+  };
+
+  const actionsMap = {
+    update: updatePostAction,
+    create: createPostAction,
+  };
+
+  const [state, action, isPending] = useActionState(
+    actionsMap[mode],
+    initialState,
+  );
+
+  useEffect(() => {
+    if (state.errors.length > 0) {
+      state.errors.forEach(error => toast.error(error));
+    }
+  }, [state.errors]);
+
+  useEffect(() => {
+    if (state.success) {
+      toast.dismiss();
+      toast.success('Post atualizado com sucesso!');
+    }
+  }, [state.success]);
+
+  const { formState } = state;
+  const [contentValue, setContentValue] = useState(publicPost?.content || '');
 
   return (
-    <form action='' className='mb-16'>
+    <form action={action} className='mb-16'>
       <div className='flex flex-col gap-6'>
         <InputText
           labelText='ID'
           name='id'
           placeholder='ID gerado automaticamente'
           type='text'
-          defaultValue={''}
+          defaultValue={formState.id}
+          disabled={isPending}
           readOnly
         />
 
@@ -26,7 +81,8 @@ export function ManagePostForm() {
           name='slug'
           placeholder='Slug gerado automaticamente'
           type='text'
-          defaultValue={''}
+          defaultValue={formState.slug}
+          disabled={isPending}
           readOnly
         />
 
@@ -35,7 +91,8 @@ export function ManagePostForm() {
           name='author'
           placeholder='Digite o nome do autor'
           type='text'
-          defaultValue={''}
+          disabled={isPending}
+          defaultValue={formState.author}
         />
 
         <InputText
@@ -43,7 +100,8 @@ export function ManagePostForm() {
           name='titulo'
           placeholder='Digite o titulo'
           type='text'
-          defaultValue={''}
+          disabled={isPending}
+          defaultValue={formState.title}
         />
 
         <InputText
@@ -51,7 +109,8 @@ export function ManagePostForm() {
           name='excerpt'
           placeholder='Digite o resumo'
           type='text'
-          defaultValue={''}
+          disabled={isPending}
+          defaultValue={formState.excerpt}
         />
 
         <MarkdownEditor
@@ -59,7 +118,7 @@ export function ManagePostForm() {
           value={contentValue}
           setValue={setContentValue}
           textAreaName='content'
-          disabled={false}
+          disabled={isPending}
         />
 
         <ImageUploader />
@@ -69,13 +128,22 @@ export function ManagePostForm() {
           name='coverImgUrl'
           placeholder='Digite a url da imagem'
           type='text'
-          defaultValue={''}
+          disabled={isPending}
+          defaultValue={formState.coverImageUrl}
         />
 
-        <InputCheckbox labelText='Publicar?' name='published' type='checkbox' />
+        <InputCheckbox
+          labelText='Publicar?'
+          name='published'
+          type='checkbox'
+          disabled={isPending}
+          defaultChecked={formState.published}
+        />
 
         <div className='mt-4'>
-          <Button type='submit'>Enviar</Button>
+          <Button type='submit' disabled={isPending}>
+            Enviar
+          </Button>
         </div>
       </div>
     </form>
