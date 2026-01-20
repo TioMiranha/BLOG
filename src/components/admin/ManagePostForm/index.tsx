@@ -2,38 +2,81 @@
 import { Button } from '@/components/Button';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
+import { MarkdownEditor } from '@/components/MarkDownEditor';
+import { useState } from 'react';
+import { ImageUploader } from '../ImageUploader';
 
 export function ManagePostForm() {
+  const [contentValue, setContentValue] = useState('');
+
   return (
     <form action='' className='mb-16'>
       <div className='flex flex-col gap-6'>
-        <InputText labelText='sua mae' placeholder='Digite o fodasse' />
-        <InputText labelText='seilacaraio' placeholder='Digite o fodassenome' />
         <InputText
-          disabled
-          labelText='seilacaraio'
-          placeholder='Digite o fodassenome'
-          defaultValue='Ola mundo'
-        />
-
-        <InputCheckbox />
-
-        <InputText
-          disabled
-          labelText='seilacaraio'
-          placeholder='Digite o fodassenome'
-        />
-
-        <InputText
-          disabled
-          labelText='seilacaraio'
-          placeholder='Digite o fodassenome'
-          defaultValue='Ola mundo'
+          labelText='ID'
+          name='id'
+          placeholder='ID gerado automaticamente'
+          type='text'
+          defaultValue={''}
           readOnly
         />
-      </div>
-      <div className='mt-4'>
-        <Button type='submit'>Enviar</Button>
+
+        <InputText
+          labelText='SLUG'
+          name='slug'
+          placeholder='Slug gerado automaticamente'
+          type='text'
+          defaultValue={''}
+          readOnly
+        />
+
+        <InputText
+          labelText='Autor'
+          name='author'
+          placeholder='Digite o nome do autor'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputText
+          labelText='Titulo'
+          name='titulo'
+          placeholder='Digite o titulo'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputText
+          labelText='Excerto'
+          name='excerpt'
+          placeholder='Digite o resumo'
+          type='text'
+          defaultValue={''}
+        />
+
+        <MarkdownEditor
+          labelText='Conteúdo'
+          value={contentValue}
+          setValue={setContentValue}
+          textAreaName='content'
+          disabled={false}
+        />
+
+        <ImageUploader />
+
+        <InputText
+          labelText='URL da imagem de capa'
+          name='coverImgUrl'
+          placeholder='Digite a url da imagem'
+          type='text'
+          defaultValue={''}
+        />
+
+        <InputCheckbox labelText='Publicar?' name='published' type='checkbox' />
+
+        <div className='mt-4'>
+          <Button type='submit'>Enviar</Button>
+        </div>
       </div>
     </form>
   );
