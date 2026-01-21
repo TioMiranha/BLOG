@@ -5,16 +5,18 @@ import {
   makePublicPostFromDb,
   PublicPost,
 } from '@/dto/post/dto';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 import { PostUpdateSchema } from '@/lib/post/validations';
 import { PostModel } from '@/models/post/post-model';
 import { postRepository } from '@/repositories/post';
+import { makeRandomString } from '@/utils/make-handle-string';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 type UpdatePostActionState = {
   formState: PublicPost;
   errors: string[];
-  success?: true;
+  success?: string;
 };
 
 export async function updatePostAction(
@@ -39,6 +41,15 @@ export async function updatePostAction(
 
   const formDataToObj = Object.fromEntries(formData.entries());
   const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
+
+  const isAuth = await verifyLoginSession();
+
+  if (!isAuth) {
+    return {
+      formState: makePartialPublicPost(formDataToObj),
+      errors: ['Faça login em outra aba antes de salvar'],
+    };
+  }
 
   const validPostData = zodParsedObj.data;
   const newPost: PostModel = {
@@ -68,6 +79,6 @@ export async function updatePostAction(
   return {
     formState: makePublicPostFromDb(post),
     errors: [],
-    success: true,
+    success: makeRandomString(),
   };
 }

@@ -1,8 +1,17 @@
 'use server';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 import { postRepository } from '@/repositories/post';
 import { revalidateTag } from 'next/cache';
 
 export async function deletePostAction(id: string) {
+  const isAuth = await verifyLoginSession();
+
+  if (!isAuth) {
+    return {
+      errors: 'Faça login em outra aba antes de salvar',
+    };
+  }
+
   if (!id || typeof id !== 'string') {
     return {
       error: 'Dados inválidos',

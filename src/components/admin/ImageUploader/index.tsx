@@ -7,6 +7,8 @@ import { ImageUpIcon } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
+const maxSize = Number(process.env.IMAGE_UPLOADER_MAX_SIZE) || 921600;
+
 type ImageUploaderProps = {
   disabled?: boolean;
 };
