@@ -7,8 +7,8 @@ import {
 } from '@/dto/post/dto';
 import { verifyLoginSession } from '@/lib/login/manage-login';
 import { PostUpdateSchema } from '@/lib/post/validations';
-import { PostModel } from '@/models/post/post-model';
 import { postRepository } from '@/repositories/post';
+import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
 import { makeRandomString } from '@/utils/make-handle-string';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -23,6 +23,8 @@ export async function updatePostAction(
   prevState: UpdatePostActionState,
   formData: FormData,
 ): Promise<UpdatePostActionState> {
+  const isAuth = await verifyLoginSession();
+
   if (!(formData instanceof FormData)) {
     return {
       formState: prevState.formState,
@@ -42,8 +44,6 @@ export async function updatePostAction(
   const formDataToObj = Object.fromEntries(formData.entries());
   const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
 
-  const isAuth = await verifyLoginSession();
-
   if (!isAuth) {
     return {
       formState: makePartialPublicPost(formDataToObj),
@@ -51,8 +51,16 @@ export async function updatePostAction(
     };
   }
 
+  if (!zodParsedObj.success) {
+    const errors = getZodErrorMessages(zodParsedObj.error);
+    return {
+      errors,
+      formState: makePartialPublicPost(formDataToObj),
+    };
+  }
+
   const validPostData = zodParsedObj.data;
-  const newPost: PostModel = {
+  const newPost = {
     ...validPostData,
   };
 
@@ -74,7 +82,7 @@ export async function updatePostAction(
   }
 
   revalidateTag('posts', 'max');
-  redirect(`/post-${post.slug}`);
+  redirect(`post-${post.slug}`);
 
   return {
     formState: makePublicPostFromDb(post),

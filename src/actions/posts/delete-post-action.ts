@@ -8,7 +8,7 @@ export async function deletePostAction(id: string) {
 
   if (!isAuth) {
     return {
-      errors: 'Faça login em outra aba antes de salvar',
+      error: 'Faça login em outra aba antes de salvar',
     };
   }
 

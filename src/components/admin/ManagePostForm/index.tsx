@@ -36,14 +36,14 @@ export function ManagePostForm(props: ManagePostFormProps) {
     publicPost = props.publicPost;
   }
 
-  const initialState = {
-    formState: makePartialPublicPost(publicPost),
-    errors: [],
-  };
-
   const actionsMap = {
     update: updatePostAction,
     create: createPostAction,
+  };
+
+  const initialState = {
+    formState: makePartialPublicPost(publicPost),
+    errors: [],
   };
 
   const [state, action, isPending] = useActionState(
@@ -58,11 +58,18 @@ export function ManagePostForm(props: ManagePostFormProps) {
   }, [state.errors]);
 
   useEffect(() => {
+    if (state.success) {
+      toast.dismiss();
+      toast.success('Post atualizado com sucesso!');
+    }
+  }, [state.success]);
+
+  useEffect(() => {
     if (created === '1') {
       toast.dismiss();
       toast.success('Post criado com sucesso!');
       const url = new URL(window.location.href);
-      url.searchParams.delete(created);
+      url.searchParams.delete('created');
       router.replace(url.toString());
     }
   }, [created, router]);
